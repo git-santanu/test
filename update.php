@@ -1,12 +1,20 @@
 <?php
 include 'connect.php';
-$alertMsg = false;
-if(isset($_POST['submit'])){
+$uid =$_GET['updateid'] ;
+$sql= "select * from `curd` where sno=$uid"; //get the update id
+$res = mysqli_query($con,$sql);
+$idVal = mysqli_fetch_assoc($res); //get the all the value respect to the id
+$name = $idVal['name'];
+$email =$idVal['email'];
+$phone= $idVal['phone'];
+$password=$idVal['password'];
+
+if(isset($_POST['update'])){
   $name=$_POST['name'];
   $email=$_POST['email'];
   $phone=$_POST['phone'];
   $password=$_POST['password'];
-  $sql = "insert into `curd` (name, email, phone, password) values('$name','$email','$phone','$password')";
+  $sql = "update `curd` set sno='$uid',name='$name', email='$email', phone='$phone',password='$password' where sno=$uid";
   $res = mysqli_query($con,$sql);
   if($res){
     $alertMsg = true;
@@ -43,36 +51,29 @@ if(isset($_POST['submit'])){
   </head>
 
   <body>
-    <?php
-       if($alertMsg){
-        echo '<div class="alert alert-success" role="alert">
-        A simple success alert—check it out!
-      </div>';
-       }
-    ?>
     <div class="container my-4">
       <h1 style="text-align: center;">Signup here!</h1>
       <form method="post">
         <div class="form-group">
           <label>Name</label>
-          <input type="text" class="form-control" placeholder="Enter your name" name="name" autocomplete="off" />
+          <input type="text" class="form-control" placeholder="Enter your name" name="name" autocomplete="off" value=<?php echo $name  ?> />
         </div>
         <div class="form-group">
           <label>Email</label>
-          <input type="email" class="form-control" placeholder="Enter your email" name="email" autocomplete="off" />
+          <input type="email" class="form-control" placeholder="Enter your email" name="email" autocomplete="off" value=<?php echo $email ?> />
         </div>
         <div class="form-group">
           <label>Phone</label>
           <input type="text" class="form-control" placeholder="Enter your phone number" name="phone"
-            autocomplete="off" />
+            autocomplete="off"  value=<?php echo $phone ?> />
         </div>
         <div class="form-group">
           <label>Password</label>
           <input type="text" class="form-control" placeholder="Enter your phone password" name="password"
-            autocomplete="off" />
+            autocomplete="off" value=<?php echo $password ?> />
         </div>
         <div class="row d-flex justify-content-center align-content-center">
-          <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+          <button type="submit" class="btn btn-primary" name="update">Update</button>
         </div>
       </form>
     </div>
